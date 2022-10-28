@@ -13,4 +13,7 @@ def load_data():
 
 df = load_data()
 
+malay_turnout = st.slider('Malay turnout', 0, 100, 80)
+st.write("Malay turnout:", malay_turnout, )
+
 st.dataframe(df)
