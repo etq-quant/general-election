@@ -61,7 +61,6 @@ def get_base(a,b):
         return 'PH'
     a = a.split('-')[0]
     b = b.split('-')[0]
-    
     if a==b=='BN':
         return 'BN'
     else:
@@ -73,9 +72,6 @@ df['party'] = df['base'].fillna(df['estimated'])
 data = {'BN': '#2B65EC', 'PH': '#E41B17', 'PN': '#659EC7'}
 def highlight_party(val):
     return 'background-color: {}'.format(data.get(val))
-
-#st.bar_chart(df.groupby(['party']).size())
-
 
 sdf = df.groupby(['party']).size().reset_index().rename(columns={0: 'seats'})
 sdf['color'] = df['party'].map(data)
