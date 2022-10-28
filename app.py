@@ -53,16 +53,17 @@ df['PN'] = df['malay_voter_ratio']*PN_MS*malay_turnout + df['non_malay_voter_rat
 df['estimated'] = df[['BN','PH','PN']].idxmax(axis=1)
 
 def get_base(a,b):
-
-    if a=='PR-PAS' and b=='GS-PAS':
+    PAS_LIST = ['PR-PAS', 'GS-PAS']
+    PH_LIST = ['PH-DAP', 'PH-PKR', 'PH-PAN', 'PR-DAP', 'PR-PKR']
+    if a in PAS_LIST and b in PAS_LIST:
         return 'PN'
+    if a in PH_LIST and b in PH_LIST:
+        return 'PH'
     a = a.split('-')[0]
     b = b.split('-')[0]
     
     if a==b=='BN':
         return 'BN'
-    elif a=='PR' and b=='PH':
-        return 'PH'
     else:
         return None
 
