@@ -109,23 +109,3 @@ st.altair_chart(chart, use_container_width=True)
 cols = ['state', 'constituency_s', '2004', '2008', '2013', '2018', 'malay_voter_ratio', 'non_malay_voter_ratio', 'party']
 st.dataframe(df.set_index('##')[cols].style.applymap(highlight_party, subset=['party']),
     use_container_width=True)
-
-# ColorMinMax = st.markdown(''' <style> div.stSlider > div[data-baseweb = "slider"] > div[data-testid="stTickBar"] > div {
-#     background: rgb(1 1 1 / 0%); } </style>''', unsafe_allow_html = True)
-
-
-# Slider_Cursor = st.markdown(''' <style> div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]{
-#     background-color: rgb(14, 38, 74); box-shadow: rgb(14 38 74 / 20%) 0px 0px 0px 0.2rem;} </style>''', unsafe_allow_html = True)
-
-    
-# Slider_Number = st.markdown(''' <style> div.stSlider > div[data-baseweb="slider"] > div > div > div > div
-#                                 { color: rgb(14, 38, 74); } </style>''', unsafe_allow_html = True)
-    
-
-# col = f''' <style> div.stSlider > div[data-baseweb = "slider"] > div > div {{
-#     background: linear-gradient(to right, rgb(1, 183, 158) 0%, 
-#                                 #2B65EC {BN_MS}% , 
-#                                 #2B65EC {BN_MS}% , 
-#                                }} </style>'''
-
-# ColorSlider = st.markdown(col, unsafe_allow_html = True)  
