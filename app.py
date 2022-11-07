@@ -134,8 +134,15 @@ cols = [
     "party",
 ]
 
-tab1 = st.tabs(["Estimation"])
+tab1, tab2 = st.tabs(["Estimation", "New Voters"])
 with tab1:
+    st.dataframe(
+        df.set_index("##")[cols].style.applymap(highlight_party, subset=["party"]),
+        use_container_width=True,
+        height=800,
+    )
+
+with tab2:
     st.dataframe(
         df.set_index("##")[cols].style.applymap(highlight_party, subset=["party"]),
         use_container_width=True,
