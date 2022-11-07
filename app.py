@@ -180,10 +180,10 @@ front_cols = [
     "GE15_others_ratio",
 ]
 GE14_voter_cols = [
-    "GE14_{}_voters".format(i) for i in ["malay", "chinese", "indian", "others"]
+    "GE14_{}_ratio".format(i) for i in ["malay", "chinese", "indian", "others"]
 ]
 GE15_voter_cols = [
-    "GE15_{}_voters".format(i) for i in ["malay", "chinese", "indian", "others"]
+    "GE15_{}_ratio".format(i) for i in ["malay", "chinese", "indian", "others"]
 ]
 rearrange_cols = front_cols + [i for i in nvdf.columns if i not in front_cols]
 with tab2:
@@ -191,14 +191,15 @@ with tab2:
         nvdf[rearrange_cols]
         .set_index(["##", "state", "constituency", "2004", "2008", "2013", "2018"])
         .style.format({i: "{:,.0f}" for i in num_cols})
-        .background_gradient(subset=GE14_voter_cols, cmap="Blues", axis=1)
-        .background_gradient(subset=GE15_voter_cols, cmap="Reds", axis=1)
+        .background_gradient(
+            subset=GE14_voter_cols + GE15_voter_cols, cmap="Blues", axis=1
+        )
+        # .background_gradient(subset=GE14_voter_cols, cmap="Blues", axis=1)
+        # .background_gradient(subset=GE15_voter_cols, cmap="Reds", axis=1)
         .background_gradient(
             subset="registered_voters_increase_pct", cmap="Oranges", axis=0
         )
-        .background_gradient(
-            subset="GE14_majority_pct", cmap="Greens", axis=0
-        )
+        .background_gradient(subset="GE14_majority_pct", cmap="Greens", axis=0)
         .bar(
             subset=["registered_voters_increase_pct"], color="#54C571", vmin=0, vmax=100
         ),
