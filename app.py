@@ -152,6 +152,10 @@ front_cols = [
     "##",
     "state",
     "constituency",
+    "2004",
+    "2008",
+    "2013",
+    "2018",
     "GE14_registered_voters",
     "GE15_registered_voters",
     "registered_voters_increase",
@@ -179,7 +183,7 @@ rearrange_cols = front_cols + [i for i in nvdf.columns if i not in front_cols]
 with tab2:
     st.dataframe(
         nvdf[rearrange_cols]
-        .set_index(["##", "state", "constituency"])
+        .set_index(["##", "state", "constituency", "2004", "2008", "2013", "2018",])
         .style.format({i: "{:,.0f}" for i in num_cols}),
         use_container_width=True,
         height=800,
