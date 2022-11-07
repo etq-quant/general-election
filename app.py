@@ -146,8 +146,7 @@ nvdf = pd.read_csv("data/new_voters.csv")
 nvdf = nvdf[~nvdf["state"].isin(["Sarawak", "Sabah"])].copy()
 int_types = ["int16", "int32", "int64"]
 float_types = ["float16", "float32", "float64"]
-int_cols = nvdf.select_dtypes(include=int_types).columns
-float_cols = nvdf.select_dtypes(include=float_types).columns
+num_cols = nvdf.select_dtypes(include=int_types + float_types).columns
 
 front_cols = [
     "##",
@@ -181,8 +180,7 @@ with tab2:
     st.dataframe(
         nvdf[rearrange_cols]
         .set_index(["##", "state", "constituency"])
-        .style.format({i: "{:,.0d}" for i in int_cols})
-        .format({i: "{:,.2f}" for i in float_cols}),
+        .style.format({i: "{:,.0f}" for i in num_cols}),
         use_container_width=True,
         height=800,
     )
