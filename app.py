@@ -134,8 +134,10 @@ cols = [
     "party",
 ]
 
-st.dataframe(
-    df.set_index("##")[cols].style.applymap(highlight_party, subset=["party"]),
-    use_container_width=True,
-    height=800,
-)
+tab1 = st.tabs(["Estimation"])
+with tab1:
+    st.dataframe(
+        df.set_index("##")[cols].style.applymap(highlight_party, subset=["party"]),
+        use_container_width=True,
+        height=800,
+    )
