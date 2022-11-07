@@ -13,7 +13,7 @@ DATA_PATH = "data/GE_sdata.csv"
 @st.cache(allow_output_mutation=True)
 def load_data():
     df = pd.read_csv(DATA_PATH)
-    df = df[~df["state"].isin(["Sarawak", "Sabah"])]
+    df = df[~df["state"].isin(["Sarawak", "Sabah"])].copy()
     return df
 
 
@@ -142,9 +142,29 @@ with tab1:
         height=800,
     )
 
+nvdf = pd.read_csv("data/new_voters.csv")
+nvdf = nvdf[~nvdf["state"].isin(["Sarawak", "Sabah"])].copy()
+int_types = ["int16", "int32", "int64"]
+float_types = ["float16", "float32", "float64"]
+int_cols = nvdf.select_dtypes(include=int_types).columns
+float_cols = nvdf.select_dtypes(include=float_types).columns
+
+front_cols = [
+    "##",
+    "state",
+    "constituency",
+    "GE14_registered_voters",
+    "GE15_registered_voters",
+    "registered_voters_increase",
+    "registered_voters_increase_pct",
+]
+rearrange_cols = front_cols + [i for i in nvdf.columns if i not in front_cols]
 with tab2:
     st.dataframe(
-        df.set_index("##")[cols].style.applymap(highlight_party, subset=["party"]),
+        nvdf[rearrange_cols]
+        .set_index("##")
+        .style.format({i: "{:,.0f}" for i in int_cols})
+        .format({i: "{:,.2f}" for i in float_cols}),
         use_container_width=True,
         height=800,
     )
