@@ -162,7 +162,7 @@ rearrange_cols = front_cols + [i for i in nvdf.columns if i not in front_cols]
 with tab2:
     st.dataframe(
         nvdf[rearrange_cols]
-        .set_index("##")
+        .set_index(["##", 'state', 'constituency'])
         .style.format({i: "{:,.0f}" for i in int_cols})
         .format({i: "{:,.2f}" for i in float_cols}),
         use_container_width=True,
