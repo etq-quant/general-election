@@ -124,7 +124,7 @@ st.altair_chart(chart, use_container_width=True)
 
 cols = [
     "state",
-    "constituency_s",
+    "constituency",
     "2004",
     "2008",
     "2013",
