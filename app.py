@@ -157,13 +157,31 @@ front_cols = [
     "GE15_registered_voters",
     "registered_voters_increase",
     "registered_voters_increase_pct",
+    "GE14_majority",
+    "GE14_majority_pct",
+    "GE14_malay_voters",
+    "GE14_malay_ratio",
+    "GE15_malay_voters",
+    "GE15_malay_ratio",
+    "GE14_chinese_voters",
+    "GE14_chinese_ratio",
+    "GE15_chinese_voters",
+    "GE15_chinese_ratio",
+    "GE14_indian_voters",
+    "GE14_indian_ratio",
+    "GE15_indian_voters",
+    "GE15_indian_ratio",
+    "GE14_others_voters",
+    "GE14_others_ratio",
+    "GE15_others_voters",
+    "GE15_others_ratio",
 ]
 rearrange_cols = front_cols + [i for i in nvdf.columns if i not in front_cols]
 with tab2:
     st.dataframe(
         nvdf[rearrange_cols]
-        .set_index(["##", 'state', 'constituency'])
-        .style.format({i: "{:,.0f}" for i in int_cols})
+        .set_index(["##", "state", "constituency"])
+        .style.format({i: "{:,.0d}" for i in int_cols})
         .format({i: "{:,.2f}" for i in float_cols}),
         use_container_width=True,
         height=800,
