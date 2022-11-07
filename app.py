@@ -189,7 +189,7 @@ rearrange_cols = front_cols + [i for i in nvdf.columns if i not in front_cols]
 with tab2:
     st.dataframe(
         nvdf[rearrange_cols]
-        .set_index(["##", "state", "constituency", "2004", "2008", "2013", "2018"])
+        .set_index(["##", "state", "constituency"])
         .style.format({i: "{:,.0f}" for i in num_cols})
         .background_gradient(
             subset=GE14_voter_cols + GE15_voter_cols, cmap="Blues", axis=1
