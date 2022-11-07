@@ -9,23 +9,11 @@ st.set_page_config(
 st.title("General Election")
 DATA_PATH = "data/GE_sdata.csv"
 
-cols = [
-    "state",
-    "constituency_s",
-    "2004",
-    "2008",
-    "2013",
-    "2018",
-    "malay_voter_ratio",
-    "non_malay_voter_ratio",
-    "party",
-]
-
 
 @st.cache(allow_output_mutation=True)
 def load_data():
     df = pd.read_csv(DATA_PATH)
-    df = df[~df["state"].isin(["Sarawak", "Sabah"])][cols]
+    df = df[~df["state"].isin(["Sarawak", "Sabah"])]
     return df
 
 
@@ -134,10 +122,20 @@ chart = (
 
 st.altair_chart(chart, use_container_width=True)
 
+cols = [
+    "state",
+    "constituency_s",
+    "2004",
+    "2008",
+    "2013",
+    "2018",
+    "malay_voter_ratio",
+    "non_malay_voter_ratio",
+    "party",
+]
 
 st.dataframe(
     df.set_index("##")[cols].style.applymap(highlight_party, subset=["party"]),
     use_container_width=True,
     height=800,
 )
-
