@@ -118,7 +118,7 @@ if data["safe_combo"]:
     )
 else:
     df["base"] = df["safe_threshold"] >= data["safe_threshold"]
-    df["base_party"] = df[["base", "safe_threshold"]].apply(
+    df["base_party"] = df[["base", "2018_party"]].apply(
         lambda x: x["2018_party"] if x["base"] else None, axis=1,
     )
 
