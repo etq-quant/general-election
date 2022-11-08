@@ -76,10 +76,10 @@ with my_expander:
 
 for i in ["BN", "PH", "PN"]:
     df[i] = (
-        data[f"{i}_Malay_support"] * df["GE15_malay_voters"]
-        + data[f"{i}_Chinese_support"] * df["GE15_chinese_voters"]
-        + data[f"{i}_Indian_support"] * df["GE15_indian_voters"]
-        + data[f"{i}_Others_support"] * df["GE15_others_voters"]
+        data[f"{i}_Malay_support"] * df["GE15_malay_voters"] / 100
+        + data[f"{i}_Chinese_support"] * df["GE15_chinese_voters"] / 100
+        + data[f"{i}_Indian_support"] * df["GE15_indian_voters"] / 100
+        + data[f"{i}_Others_support"] * df["GE15_others_voters"] / 100
     )
 
 df["estimate_party"] = df[["BN", "PH", "PN"]].idxmax(axis=1)
