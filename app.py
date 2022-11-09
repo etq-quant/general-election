@@ -25,7 +25,7 @@ data = {}
 # with v2_tab:
 my_expander = st.expander(label="Turnout", expanded=True)
 with my_expander:
-    para = [("Malay", 80), ("Chinese", 80), ("Indian", 80), ("Others", 80)]
+    para = [("Malay", 72), ("Chinese", 70), ("Indian", 70), ("Others", 70)]
     st_cols = st.columns(len(para))
     for k, v in enumerate(st_cols):
         data["{}_turnout".format(para[k][0])] = v.slider(
@@ -34,7 +34,7 @@ with my_expander:
 
 my_expander = st.expander(label="BN Support", expanded=True)
 with my_expander:
-    para = [("Malay", 40), ("Chinese", 20), ("Indian", 30), ("Others", 20)]
+    para = [("Malay", 38), ("Chinese", 20), ("Indian", 30), ("Others", 20)]
     st_cols = st.columns(len(para))
     for k, v in enumerate(st_cols):
         data["BN_{}_support".format(para[k][0])] = v.slider(
@@ -43,7 +43,7 @@ with my_expander:
 
 my_expander = st.expander(label="PH Support", expanded=True)
 with my_expander:
-    para = [("Malay", 20), ("Chinese", 50), ("Indian", 50), ("Others", 20)]
+    para = [("Malay", 25), ("Chinese", 60), ("Indian", 60), ("Others", 20)]
     st_cols = st.columns(len(para))
     for k, v in enumerate(st_cols):
         data["PH_{}_support".format(para[k][0])] = v.slider(
@@ -52,7 +52,7 @@ with my_expander:
 
 my_expander = st.expander(label="PN Support", expanded=True)
 with my_expander:
-    para = [("Malay", 25), ("Chinese", 15), ("Indian", 30), ("Others", 20)]
+    para = [("Malay", 25), ("Chinese", 15), ("Indian", 10), ("Others", 20)]
     st_cols = st.columns(len(para))
     for k, v in enumerate(st_cols):
         data["PN_{}_support".format(para[k][0])] = v.slider(
@@ -65,7 +65,7 @@ with my_expander:
         "Safe Threshold: percentage of majority - percentage of new voters increase",
         -100,
         100,
-        -20,
+        -100,
     )
 
 my_expander = st.expander(label="Safe Combo", expanded=True)
@@ -76,10 +76,22 @@ with my_expander:
 
 for i in ["BN", "PH", "PN"]:
     df[i] = (
-        data[f"{i}_Malay_support"] * df["GE15_malay_voters"] / 100
-        + data[f"{i}_Chinese_support"] * df["GE15_chinese_voters"] / 100
-        + data[f"{i}_Indian_support"] * df["GE15_indian_voters"] / 100
-        + data[f"{i}_Others_support"] * df["GE15_others_voters"] / 100
+        data["Malay_turnout"]
+        * data[f"{i}_Malay_support"]
+        * df["GE15_malay_voters"]
+        / 10000
+        + data["Chinese_turnout"]
+        * data[f"{i}_Chinese_support"]
+        * df["GE15_chinese_voters"]
+        / 10000
+        + data["Indian_turnout"]
+        * data[f"{i}_Indian_support"]
+        * df["GE15_indian_voters"]
+        / 10000
+        + data["Others_turnout"]
+        * data[f"{i}_Others_support"]
+        * df["GE15_others_voters"]
+        / 10000
     )
 
 df["estimate_party"] = df[["BN", "PH", "PN"]].idxmax(axis=1)
@@ -117,10 +129,12 @@ if data["safe_combo"]:
         lambda x: x[sname] if x["base"] else None, axis=1,
     )
 else:
-    df["base"] = df["safe_threshold"] >= data["safe_threshold"]
-    df["base_party"] = df[["base", "2018_party"]].apply(
-        lambda x: x["2018_party"] if x["base"] else None, axis=1,
-    )
+    df['base'] = False
+    df['base_party'] = None
+    # df["base"] = df["safe_threshold"] >= data["safe_threshold"]
+    # df["base_party"] = df[["base", "2018_party"]].apply(
+    #     lambda x: x["2018_party"] if x["base"] else None, axis=1,
+    # )
 
 df["party"] = df["base_party"].fillna(df["estimate_party"])
 
@@ -190,6 +204,9 @@ with tab_data:
         "GE14_majority",
         "GE14_majority_pct",
         "safe_threshold",
+        "BN",
+        "PH",
+        "PN",
     ]
     st.dataframe(
         df[front_cols]
