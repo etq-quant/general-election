@@ -2,49 +2,33 @@ import pandas as pd
 import numpy as np
 
 
-def get_table1(df):
-    tdf = pd.melt(
-        df[["state", "GE14_registered_voters", "GE15_registered_voters"]].rename(
-            columns={"GE14_registered_voters": "GE14", "GE15_registered_voters": "GE15"}
-        ),
-        id_vars=["state"],
-        var_name="GE",
-        value_name="registered_voters",
-    )
-    tdf = tdf.pivot_table(
-        index="state", columns="GE", values="registered_voters", aggfunc="sum"
-    )
-    tdf.columns.name = None
-    tdf.index.name = None
-    tdf.loc["Total"] = tdf.sum()
+def get_table1(df, gdf):
+    tdf = pd.melt(df[['state', 'GE14_registered_voters', 'GE15_registered_voters']].rename(columns={'GE14_registered_voters': 'GE14', 'GE15_registered_voters': 'GE15'}), id_vars=['state'], var_name='GE', value_name='registered_voters')
+    tdf = tdf.pivot_table(index='state', columns='GE', values='registered_voters', aggfunc='sum')
+    tdf.columns.name=None
+    tdf.index.name=None
+    tdf.loc['Total'] = tdf.sum()
+    tdf['registered_voters_increase'] = tdf['GE15'] - tdf['GE14']
+    tdf['registered_voters_increase_pct'] = (tdf['GE15']/tdf['GE14'] - 1 )*100
+    
+    ydf = gdf.groupby(['state'])[['male_18_20', 'female_18_20']].sum()
+    ydf['young_voters'] = ydf.sum(axis=1)
+    ydf.loc['Total'] = ydf.sum()
+    tdf = tdf.merge(ydf, left_index=True, right_index=True, how='left')
+    tdf['young_voters_pct'] = tdf['young_voters']/tdf['GE15']*100
+    
     u = tdf.index.get_level_values(0)
 
-    tdf["registered_voters_increase"] = tdf["GE15"] - tdf["GE14"]
-    tdf["registered_voters_increase_pct"] = (tdf["GE15"] / tdf["GE14"] - 1) * 100
-
-    tdf = (
-        tdf.style.format("{:,.0f}")
-        .format("{:,.2f}%", subset=["registered_voters_increase_pct"])
-        .background_gradient(
-            subset=pd.IndexSlice[u[:-1], ["GE14", "GE15"]], cmap="pink_r", axis=0
-        )
-        .bar(
-            subset=pd.IndexSlice[u[:-1], "registered_voters_increase"], color="#FED8B1"
-        )
-        .bar(
-            subset=pd.IndexSlice[u[:-1], "registered_voters_increase_pct"],
-            color="#FBE7A1",
-        )
-        .applymap(lambda x: "background-color: #BCC6CC", subset=pd.IndexSlice[u[-1], :])
-        .set_table_styles(
-            [
-                {
-                    "selector": "thead th",
-                    "props": [("background-color", "#36454F"), ("color", "white")],
-                },
-            ]
-        )
-    )
+    tdf = tdf.style.format('{:,.0f}').format('{:,.2f}%', subset=[i for i in tdf.columns if i.endswith('_pct')])\
+    .background_gradient(subset=pd.IndexSlice[u[:-1], ['GE14','GE15', 'young_voters', 'young_voters_pct']], cmap='pink_r', axis=0)\
+    .bar(subset=pd.IndexSlice[u[:-1], 'registered_voters_increase'], color='#FED8B1')\
+    .bar(subset=pd.IndexSlice[u[:-1], 'registered_voters_increase_pct'], color='#FBE7A1')\
+    .bar(subset=pd.IndexSlice[u[:-1], 'male_18_20'], color='#1974D2')\
+    .bar(subset=pd.IndexSlice[u[:-1], 'female_18_20'], color='#F67280')\
+    .applymap(lambda x: "background-color: #BCC6CC", subset=pd.IndexSlice[u[-1], :])\
+    .set_table_styles(
+            [{'selector': 'thead th',
+            'props': [('background-color', '#36454F'), ('color', 'white')]},])
     return tdf
 
 

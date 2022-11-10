@@ -9,6 +9,7 @@ st.set_page_config(
 )
 st.title("General Election")
 DATA_PATH = "data/new_voters.csv"
+DATA_PATH_GE15 = "data/voters_ge15.csv"
 
 
 @st.cache(allow_output_mutation=True)
@@ -18,8 +19,14 @@ def load_data():
     return df
 
 
-df = load_data()
+@st.cache(allow_output_mutation=True)
+def load_data_GE15():
+    df = pd.read_csv(DATA_PATH_GE15)
+    return df
 
+
+df = load_data()
+gdf = load_data_GE15()
 # v2_tab, v1_tab = st.tabs(["V2", "V1"])
 
 data = {}
@@ -286,7 +293,7 @@ with tab_raw_data:
 
 with tab_descriptive_analysis:
 
-    tdf1 = get_table1(df)
+    tdf1 = get_table1(df, gdf)
     st.subheader("New Registered Voters by States")
     st.table(tdf1)
 
