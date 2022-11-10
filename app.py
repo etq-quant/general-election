@@ -175,10 +175,10 @@ with tab_estimated_result:
     tab_chart, tab_data, tab_raw_data = st.tabs(["Chart", "Data", "Raw Data"])
 
     with tab_chart:
-        st.subheader("Expected Result Excluded Sabah and Sarawak")
+        st.subheader("Estimated Result Excluded Sabah and Sarawak")
         sdf = df.groupby(["party"]).size().reset_index().rename(columns={0: "seats"})
         chart = (
-            alt.Chart(sdf, title="Expected Result")
+            alt.Chart(sdf, title="Estimated Result")
             .mark_bar()
             .encode(
                 alt.X("party"),
