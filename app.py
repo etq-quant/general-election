@@ -339,9 +339,13 @@ with tab_age_group:
         st.dataframe(ag_data_df, height=800)
 
     with tab_ag_state:
-        state = st.multiselect("state", ag_df["state"].unique(), default="Selangor")
-        for s in state:
-            fig = plot_age_group(ag_df[ag_df["state"] == s], s)
+        state = st.multiselect("state", ag_df["state"].unique(), default=None)
+        if state:
+            for s in state:
+                fig = plot_age_group(ag_df[ag_df["state"] == s], s)
+                st.plotly_chart(fig)
+        else:
+            fig = plot_age_group(ag_df, "Malaysia")
             st.plotly_chart(fig)
 
     with tab_ag_parlimen:
