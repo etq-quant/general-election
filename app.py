@@ -321,7 +321,22 @@ with tab_descriptive_analysis:
         st.dataframe(tdf22, height=530)
 
 with tab_age_group:
-    tab_ag_state, tab_ag_parlimen = st.tabs(["State", "Parlimen"])
+    tab_ag_state, tab_ag_parlimen, tab_ag_data, = st.tabs(["State", "Parlimen", "Data"])
+
+    with tab_ag_data:
+        ag_data_df = gdf.groupby(["state", "parlimen"])[
+            ["total"]
+            + [i for i in gdf.columns if any([j for j in ["male", "female"] if j in i])]
+        ].sum()
+        ag_data_df = ag_data_df.style.background_gradient(
+            subset=[
+                i for i in gdf.columns if any([j for j in ["male", "female"] if j in i])
+            ],
+            cmap="BuPu",
+            axis=0,
+        )
+        st.subheader("Age Group Data")
+        st.dataframe(ag_data_df, height=800)
 
     with tab_ag_state:
         state = st.multiselect("state", ag_df["state"].unique(), default="Selangor")
@@ -330,7 +345,9 @@ with tab_age_group:
             st.plotly_chart(fig)
 
     with tab_ag_parlimen:
-        parlimen = st.multiselect("parlimen", ag_df["parlimen"].unique(), default="P.001 Padang Besar")
+        parlimen = st.multiselect(
+            "parlimen", ag_df["parlimen"].unique(), default="P.001 Padang Besar"
+        )
         for p in parlimen:
             fig = plot_age_group(ag_df[ag_df["parlimen"] == p], p)
             st.plotly_chart(fig)
