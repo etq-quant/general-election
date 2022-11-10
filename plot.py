@@ -289,6 +289,7 @@ def get_race_table2(df):
     )
     return tdf
 
+
 def plot_age_group(tdf, state):
     """
     		female	male
@@ -302,40 +303,49 @@ def plot_age_group(tdf, state):
     80_89	2321	1496
     90+		390		284
     """
-    tdf = tdf.groupby(['gender', 'age_group'])['value'].sum().reset_index()
-    tdf = tdf.pivot(index='age_group', columns=['gender'], values='value')
-    total_voters = tdf[['male','female']].sum().sum()
+    tdf = tdf.groupby(["gender", "age_group"])["value"].sum().reset_index()
+    tdf = tdf.pivot(index="age_group", columns=["gender"], values="value")
+    total_voters = tdf[["male", "female"]].sum().sum()
     y_age = tdf.index
-    x_M = tdf['male'] * -1
-    x_F = tdf['female'] 
+    x_M = tdf["male"] * -1
+    x_F = tdf["female"]
 
     fig = go.Figure()
 
     # Adding Male data to the figure
-    fig.add_trace(go.Bar(y= y_age, x = x_M, 
-                         name = 'Male', 
-                         orientation = 'h',
-                         hoverinfo='x',
-                         text=["{:,}".format(-1*i) for i in x_M],
-                        marker=dict(color='#1974D2')
-                        ))
+    fig.add_trace(
+        go.Bar(
+            y=y_age,
+            x=x_M,
+            name="Male",
+            orientation="h",
+            hoverinfo="x",
+            text=["{:,}".format(-1 * i) for i in x_M],
+            marker=dict(color="#1974D2"),
+        )
+    )
 
     # Adding Female data to the figure
-    fig.add_trace(go.Bar(y = y_age, x = x_F,
-                         name = 'Female', orientation = 'h',
-                         hoverinfo='x',
-                         text=["{:,}".format(i) for i in x_F],
-                        marker=dict(color='#F67280')
-                        ))
+    fig.add_trace(
+        go.Bar(
+            y=y_age,
+            x=x_F,
+            name="Female",
+            orientation="h",
+            hoverinfo="x",
+            text=["{:,}".format(i) for i in x_F],
+            marker=dict(color="#F67280"),
+        )
+    )
 
-    layout = go.Layout(yaxis=go.layout.YAxis(title='Age'),
-                       xaxis=go.layout.XAxis(
-                           title='Voters'),
-                       barmode='overlay',
-                       bargap=0.1,
-                       plot_bgcolor='white',
-                       title=f'{state} - {total_voters:,} voters'
-                      )
+    layout = go.Layout(
+        yaxis=go.layout.YAxis(title="Age"),
+        xaxis=go.layout.XAxis(title="Voters"),
+        barmode="overlay",
+        bargap=0.1,
+        plot_bgcolor="white",
+        title=f"{state}: {total_voters:,} voters",
+    )
 
     fig.update_layout(layout)
     return fig
