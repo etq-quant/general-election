@@ -304,7 +304,7 @@ def plot_age_group(tdf, state):
     """
     tdf = tdf.groupby(['gender', 'age_group'])['value'].sum().reset_index()
     tdf = tdf.pivot(index='age_group', columns=['gender'], values='value')
-
+    total_voters = tdf[['male','female']].sum().sum()
     y_age = tdf.index
     x_M = tdf['male'] * -1
     x_F = tdf['female'] 
@@ -334,7 +334,7 @@ def plot_age_group(tdf, state):
                        barmode='overlay',
                        bargap=0.1,
                        plot_bgcolor='white',
-                       title=f'{state}'
+                       title=f'{state} - {total_voters:,} voters'
                       )
 
     fig.update_layout(layout)
