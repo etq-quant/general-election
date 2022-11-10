@@ -156,6 +156,7 @@ num_cols = df.select_dtypes(include=int_types + float_types).columns
 
 
 with tab_expected_result:
+    st.subheader("Expected Result Excluded Sabah and Sarawak")
     sdf = df.groupby(["party"]).size().reset_index().rename(columns={0: "seats"})
     chart = (
         alt.Chart(sdf, title="Expected Result")

@@ -149,7 +149,7 @@ def get_race_table(df):
         )
         .highlight_null(
             subset=[i for i in tdf.columns if i.endswith("increase_pct")],
-            color="#36454F",
+            null_color="#36454F",
         )
         .set_table_styles(
             [
