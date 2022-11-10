@@ -15,7 +15,7 @@ DATA_PATH_GE15 = "data/voters_ge15.csv"
 @st.cache(allow_output_mutation=True)
 def load_data():
     df = pd.read_csv(DATA_PATH)
-    df = df[~df["state"].isin(["Sarawak", "Sabah"])].copy()
+    # df = df[~df["state"].isin(["Sarawak", "Sabah"])].copy()
     return df
 
 
@@ -25,7 +25,8 @@ def load_data_GE15():
     return df
 
 
-df = load_data()
+adf = load_data()
+df = adf[~adf["state"].isin(["Sarawak", "Sabah"])].copy()
 gdf = load_data_GE15()
 # v2_tab, v1_tab = st.tabs(["V2", "V1"])
 
@@ -293,16 +294,16 @@ with tab_raw_data:
 
 with tab_descriptive_analysis:
 
-    tdf1 = get_table1(df, gdf)
+    tdf1 = get_table1(adf, gdf)
     st.subheader("New Registered Voters by States")
     st.table(tdf1)
 
     tab1, tab2 = st.tabs(["tab1", "tab2"])
     with tab1:
-        tdf2 = get_race_table(df)
+        tdf2 = get_race_table(adf)
         st.subheader("New Registered Voters by States and Race")
         st.table(tdf2)
     with tab2:
-        tdf22 = get_race_table2(df)
+        tdf22 = get_race_table2(adf)
         st.subheader("New Registered Voters by States and Race")
         st.dataframe(tdf22, height=530)
