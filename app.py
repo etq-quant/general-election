@@ -104,8 +104,8 @@ def highlight_party(val):
 
 
 def get_party(x):
-    PN_LIST = ["PR-PAS", "GS-PAS", "PH-PPBM"]
-    PH_LIST = ["PH-DAP", "PH-PKR", "PH-PAN", "PR-DAP", "PR-PKR"]
+    PN_LIST = ["PR-PAS", "GS-PAS", "PH-PPBM", "BA-PAS"]
+    PH_LIST = ["PH-DAP", "PH-PKR", "PH-PAN", "PR-DAP", "PR-PKR", "BA-PKR"]
     if x in PN_LIST:
         return "PN"
     if x in PH_LIST:
