@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+from plot import *
 
 st.set_page_config(
     page_title="General Election", layout="wide",
@@ -134,8 +135,12 @@ else:
 
 df["party"] = df["base_party"].fillna(df["estimate_party"])
 
-tab_expected_result, tab_data, tab_raw_data = st.tabs(
-    ["Expected Result", "Data", "Raw Data"]
+
+###############
+# create tabs #
+###############
+tab_expected_result, tab_descriptive_analysis, tab_data, tab_raw_data = st.tabs(
+    ["Expected Result", "Descriptive Analysis", "Data", "Raw Data"]
 )
 
 GE14_voter_cols = [
@@ -276,3 +281,20 @@ with tab_raw_data:
         use_container_width=True,
         height=800,
     )
+
+
+with tab_descriptive_analysis:
+    tdf1 = get_table1(df)
+    st.subheader("New Registered Voters by States")
+    st.table(tdf1)
+
+    tab1, tab2 = st.tabs(["tab1", "tab2"])
+    with tab1:
+        tdf2 = get_race_table(df)
+        st.subheader("New Registered Voters by States and Race")
+        st.table(tdf2)
+
+    with tab2:
+        tdf22 = get_race_table2(df)
+        st.subheader("New Registered Voters by States and Race")
+        st.dataframe(tdf22, height=530)
