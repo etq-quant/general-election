@@ -284,6 +284,7 @@ with tab_raw_data:
 
 
 with tab_descriptive_analysis:
+
     tdf1 = get_table1(df)
     st.subheader("New Registered Voters by States")
     st.table(tdf1)
@@ -293,7 +294,6 @@ with tab_descriptive_analysis:
         tdf2 = get_race_table(df)
         st.subheader("New Registered Voters by States and Race")
         st.table(tdf2)
-
     with tab2:
         tdf22 = get_race_table2(df)
         st.subheader("New Registered Voters by States and Race")
