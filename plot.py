@@ -312,9 +312,10 @@ def plot_age_group(tdf, state):
     80_89	2321	1496
     90+		390		284
     """
-    tdf = tdf.groupby(["gender", "age_group"])["value"].sum().reset_index()
-    tdf = tdf.pivot(index="age_group", columns=["gender"], values="value").reset_index()
-    total_voters = tdf["male"].sum() + tdf["female"].sum()
+    tdf = tdf.groupby(["gender", "age_group"])["value"].sum().reset_index().copy()
+    tdf = tdf.pivot(index="age_group", columns=["gender"], values="value").copy()
+    tdf.columns = tdf.columns.tolist()
+    total_voters = tdf[["male", "female"]].sum().sum()
     y_age = tdf.index
     x_M = tdf["male"] * -1
     x_F = tdf["female"]

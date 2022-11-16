@@ -61,7 +61,7 @@ GE15_voter_cols = [
 ]
 
 adf = load_data()
-df = adf[~adf["state"].isin(["Sarawak", "Sabah"])].copy()
+df = adf[~adf["state"].isin(["Sarawak", "Sabah", "W.P. Labuan"])].copy()
 gdf = load_data_GE15()
 
 ag_df = gdf.melt(
@@ -201,7 +201,7 @@ def generate_state(df, state):
     float_types = ["float16", "float32", "float64"]
     num_cols = df.select_dtypes(include=int_types + float_types).columns
 
-    tab_chart, tab_data, tab_raw_data = st.tabs(["Chart", "Data", "Raw Data"])
+    tab_chart, tab_data = st.tabs(["Chart", "Data"])
 
     with tab_chart:
         st.subheader(f"Estimated {state} Result")
@@ -236,45 +236,45 @@ def generate_state(df, state):
 
         st.altair_chart(chart, use_container_width=True)
 
-    with tab_data:
-        front_cols = [
-            "##",
-            "state",
-            "constituency",
-            "2004",
-            "2008",
-            "2013",
-            "2018",
-            "base_party",
-            "estimate_party",
-            "BN",
-            "PH",
-            "PN",
-            "party",
-            "GE14_registered_voters",
-            "GE15_registered_voters",
-            "registered_voters_increase_pct",
-            "GE14_majority_pct",
-            "safe_threshold",
-            "registered_voters_increase",
-            "GE14_majority",
-        ]
-        st.dataframe(
-            df[front_cols]
-            .set_index(["##", "state", "constituency"])
-            .style.format({i: "{:,.0f}" for i in num_cols})
-            .applymap(highlight_party, subset=["party"])
-            .background_gradient(
-                subset="registered_voters_increase_pct", cmap="Oranges", axis=0
-            )
-            .background_gradient(subset="GE14_majority_pct", cmap="Greens", axis=0)
-            .background_gradient(subset="safe_threshold", cmap="Blues", axis=0)
-            .highlight_max(subset=["BN", "PH", "PN"], color="#AAF0D1", axis=1),
-            use_container_width=True,
-            height=800,
-        )
+    # with tab_data:
+    #     front_cols = [
+    #         "##",
+    #         "state",
+    #         "constituency",
+    #         "2004",
+    #         "2008",
+    #         "2013",
+    #         "2018",
+    #         "base_party",
+    #         "estimate_party",
+    #         "BN",
+    #         "PH",
+    #         "PN",
+    #         "party",
+    #         "GE14_registered_voters",
+    #         "GE15_registered_voters",
+    #         "registered_voters_increase_pct",
+    #         "GE14_majority_pct",
+    #         "safe_threshold",
+    #         "registered_voters_increase",
+    #         "GE14_majority",
+    #     ]
+    #     st.dataframe(
+    #         df[front_cols]
+    #         .set_index(["##", "state", "constituency"])
+    #         .style.format({i: "{:,.0f}" for i in num_cols})
+    #         .applymap(highlight_party, subset=["party"])
+    #         .background_gradient(
+    #             subset="registered_voters_increase_pct", cmap="Oranges", axis=0
+    #         )
+    #         .background_gradient(subset="GE14_majority_pct", cmap="Greens", axis=0)
+    #         .background_gradient(subset="safe_threshold", cmap="Blues", axis=0)
+    #         .highlight_max(subset=["BN", "PH", "PN"], color="#AAF0D1", axis=1),
+    #         use_container_width=True,
+    #         height=800,
+    #     )
 
-    with tab_raw_data:
+    with tab_data:
         front_cols = [
             "##",
             "state",
@@ -351,13 +351,16 @@ with tab_estimated_result:
             "Sungai Buloh (previously known as Subang)[3]",
             "Kepala Batas",
             "Tasek Gelugor",
+            "Tanjong Karang",
         ],
     )
     hard_base_party["PH"] = st.multiselect(
         "Hard Rule PH", df["constituency"].unique(), default=[]
     )
     hard_base_party["PN"] = st.multiselect(
-        "Hard Rule PN", df["constituency"].unique(), default=["Arau"]
+        "Hard Rule PN",
+        df["constituency"].unique(),
+        default=["Arau", "Sabak Bernam", "Putrajaya"],
     )
 
     undecided_malay = {}
@@ -530,7 +533,7 @@ with tab_age_group:
         if state:
             for s in state:
                 if s == "Malaysia":
-                    fig = plot_age_group(ag_df, "Malaysia")
+                    fig = plot_age_group(ag_df.copy(), "Malaysia")
                     st.plotly_chart(fig)
                 fig = plot_age_group(ag_df[ag_df["state"] == s].copy(), s)
                 st.plotly_chart(fig)
