@@ -164,6 +164,15 @@ def get_race_table(df):
             subset=[i for i in tdf.columns if i.endswith("increase_pct")],
             null_color="#36454F",
         )
+        .bar(
+            subset=[
+                "GE15_chinese_voters",
+                "GE15_indian_voters",
+                "GE15_others_voters",
+                "GE15_malay_voters",
+            ],
+            color="#FBE7A1",
+        )
         .set_table_styles(
             [
                 {
@@ -304,8 +313,8 @@ def plot_age_group(tdf, state):
     90+		390		284
     """
     tdf = tdf.groupby(["gender", "age_group"])["value"].sum().reset_index()
-    tdf = tdf.pivot(index="age_group", columns=["gender"], values="value")
-    total_voters = tdf[["male", "female"]].sum().sum()
+    tdf = tdf.pivot(index="age_group", columns=["gender"], values="value").reset_index()
+    total_voters = tdf["male"].sum() + tdf["female"].sum()
     y_age = tdf.index
     x_M = tdf["male"] * -1
     x_F = tdf["female"]
