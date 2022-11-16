@@ -61,6 +61,67 @@ def get_table1(df, gdf):
     return tdf
 
 
+def plot_age_group(tdf, state):
+    """
+    		female	male
+    18_20	5908	5980
+    21_29	20104	21211
+    30_39	22354	23227
+    40_49	15885	15944
+    50_59	13826	13115
+    60_69	11703	10402
+    70_79	6413	5364
+    80_89	2321	1496
+    90+		390		284
+    """
+    tdf = tdf.groupby(["gender", "age_group"])["value"].sum().reset_index()
+    tdf = tdf.pivot(index="age_group", columns=["gender"], values="value").reset_index()
+    total_voters = tdf["male"].sum() + tdf["female"].sum()
+    y_age = tdf["age_group"]  # tdf.index
+    x_M = tdf["male"] * -1
+    x_F = tdf["female"]
+
+    fig = go.Figure()
+
+    # Adding Male data to the figure
+    fig.add_trace(
+        go.Bar(
+            y=y_age,
+            x=x_M,
+            name="Male",
+            orientation="h",
+            hoverinfo="x",
+            text=["{:,}".format(-1 * i) for i in x_M],
+            marker=dict(color="#1974D2"),
+        )
+    )
+
+    # Adding Female data to the figure
+    fig.add_trace(
+        go.Bar(
+            y=y_age,
+            x=x_F,
+            name="Female",
+            orientation="h",
+            hoverinfo="x",
+            text=["{:,}".format(i) for i in x_F],
+            marker=dict(color="#F67280"),
+        )
+    )
+
+    layout = go.Layout(
+        yaxis=go.layout.YAxis(title="Age"),
+        xaxis=go.layout.XAxis(title="Voters"),
+        barmode="overlay",
+        bargap=0.1,
+        plot_bgcolor="white",
+        title=f"{state}: {total_voters:,} voters",
+    )
+
+    fig.update_layout(layout)
+    return fig
+
+
 def get_race_table(df):
     cols = [
         f"{i}_{j}_voters"
@@ -197,7 +258,18 @@ def get_race_table(df):
             ],
             color="#FBE7A1",
         )
-        .bar(subset=[i for i in tdf.columns if i.endswith("_ratio")], color="#FA8072",)
+        .bar(
+            subset=[
+                i for i in tdf.columns if i.endswith("_ratio") and i.startswith("GE14")
+            ],
+            color="#FA8072",
+        )
+        .bar(
+            subset=[
+                i for i in tdf.columns if i.endswith("_ratio") and i.startswith("GE15")
+            ],
+            color="#FFCBA4",
+        )
         .set_table_styles(
             [
                 {
@@ -329,8 +401,17 @@ def get_race_table2(df):
             axis=0,
         )
         .background_gradient(
-            subset=[i for i in tdf.columns if i.endswith("_ratio")],
+            subset=[
+                i for i in tdf.columns if i.endswith("_ratio") and i.startswith("GE14")
+            ],
             cmap="OrRd",
+            axis=0,
+        )
+        .background_gradient(
+            subset=[
+                i for i in tdf.columns if i.endswith("_ratio") and i.startswith("GE15")
+            ],
+            cmap="Greens",
             axis=0,
         )
         .highlight_null(
