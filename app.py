@@ -344,10 +344,14 @@ with tab_estimated_result:
     hard_base_party["BN"] = st.multiselect(
         "Hard Rule BN",
         df["constituency"].unique(),
-        default=["Sungai Buloh (previously known as Subang)[3]"],
+        default=[
+            "Sungai Buloh (previously known as Subang)[3]",
+            "Kepala Batas",
+            "Tasek Gelugor",
+        ],
     )
     hard_base_party["PH"] = st.multiselect(
-        "Hard Rule PH", df["constituency"].unique(), default=["Muar"]
+        "Hard Rule PH", df["constituency"].unique(), default=[]
     )
     hard_base_party["PN"] = st.multiselect(
         "Hard Rule PN", df["constituency"].unique(), default=["Arau"]
