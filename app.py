@@ -69,7 +69,7 @@ ag_df = gdf.melt(
     value_vars=[i for i in gdf.columns if any(x in i for x in ["male", "female"])],
     var_name="age_group",
 )
-ag_df["gender"] = ag_df["age_group"].map(lambda x: x.split("_", 1)[0])
+ag_df["gender"] = ag_df["age_group"].map(lambda x: x.split("_", 1)[0].strip())
 ag_df["age_group"] = ag_df["age_group"].map(lambda x: x.split("_", 1)[1])
 
 # v2_tab, v1_tab = st.tabs(["V2", "V1"])
@@ -535,8 +535,9 @@ with tab_age_group:
                 if s == "Malaysia":
                     fig = plot_age_group(ag_df.copy(), "Malaysia")
                     st.plotly_chart(fig)
-                fig = plot_age_group(ag_df[ag_df["state"] == s].copy(), s)
-                st.plotly_chart(fig)
+                else:
+                    fig = plot_age_group(ag_df[ag_df["state"] == s].copy(), s)
+                    st.plotly_chart(fig)
         else:
             fig = plot_age_group(ag_df, "Malaysia")
             st.plotly_chart(fig)
