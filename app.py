@@ -90,8 +90,8 @@ def generate_state(df, state):
         para = [("Malay", 80), ("Chinese", 86), ("Indian", 88), ("Others", 80)]
         st_cols = st.columns(len(para))
         for k, v in enumerate(st_cols):
-            data["{}_{}_turnout".format(state, races[k])] = v.slider(
-                "{} {} Turnout".format(state, races[k]), 0, 100, para[k][1]
+            data["{}_{}_turnout".format(state, races[k])] = v.number_input(
+                "{} {} Turnout".format(state, races[k]), 0, 100, para[k][1], 1
             )
 
     my_expander = st.expander(label="BN Support", expanded=True)
@@ -99,11 +99,12 @@ def generate_state(df, state):
         para = [("Malay", 27), ("Chinese", 15), ("Indian", 25), ("Others", 40)]
         st_cols = st.columns(len(para))
         for k, v in enumerate(st_cols):
-            data["{}_BN_{}_support".format(state, races[k])] = v.slider(
+            data["{}_BN_{}_support".format(state, races[k])] = v.number_input(
                 "{} {} Support".format(state, races[k]),
                 0,
                 100,
                 int(para_data[state]["BN_{}_support".format(races[k])]),
+                1,
             )
 
     my_expander = st.expander(label="PH Support", expanded=True)
@@ -111,11 +112,12 @@ def generate_state(df, state):
         para = [("Malay", 19), ("Chinese", 80), ("Indian", 70), ("Others", 30)]
         st_cols = st.columns(len(para))
         for k, v in enumerate(st_cols):
-            data["{}_PH_{}_support".format(state, races[k])] = v.slider(
+            data["{}_PH_{}_support".format(state, races[k])] = v.number_input(
                 "{} PH {} Support".format(state, races[k]),
                 0,
                 100,
                 int(para_data[state]["PH_{}_support".format(races[k])]),
+                1,
             )
 
     my_expander = st.expander(label="PN Support", expanded=True)
@@ -123,11 +125,12 @@ def generate_state(df, state):
         para = [("Malay", 31), ("Chinese", 5), ("Indian", 5), ("Others", 30)]
         st_cols = st.columns(len(para))
         for k, v in enumerate(st_cols):
-            data["{}_PN_{}_support".format(state, races[k])] = v.slider(
+            data["{}_PN_{}_support".format(state, races[k])] = v.number_input(
                 "{} PN {} Support".format(state, races[k]),
                 0,
                 100,
                 int(para_data[state]["PN_{}_support".format(races[k])]),
+                1,
             )
 
     my_expander = st.expander(label="Safe Threshold", expanded=False)
