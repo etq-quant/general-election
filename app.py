@@ -365,7 +365,7 @@ with tab_estimated_result:
 
     undecided_malay = {}
     undecided_malay["BN"] = st.slider("undecided Malays to BN", 0, 100, 30, 5)
-    undecided_malay["PH"] = st.slider("undecided Malays to PN", 0, 100, 30, 5)
+    undecided_malay["PH"] = st.slider("undecided Malays to PH", 0, 100, 30, 5)
     undecided_malay["PN"] = st.slider("undecided Malays to PN", 0, 100, 40, 5)
 
     for state in para_data.keys():
